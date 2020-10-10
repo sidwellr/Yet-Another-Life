@@ -1,5 +1,5 @@
 // Global constants
-const gridSize = 5000; // life grid is 1000x1000 cells
+const gridSize = 1000000; // life grid is gridSize x gridSize cells
 
 // The global generation counter
 let generation = 1;
@@ -20,7 +20,7 @@ let displayY = Math.round(gridSize / 2);  // grid cell at vertical center
 let cellSize = 10;  // size of displayed cells in pixels
 let borderSize = 1;  // size of cell borders in pixels
 
-let fr = 60; // Frame rate
+let fr = 15; // Frame rate
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -102,9 +102,9 @@ function gridy(i) {
 function initGrid() {
   // Randomly for now...
   grid = [];
-  for (let i = 0; i < 5000; i++) {
-    let x = Math.round(random(-50, 50));
-    let y = Math.round(random(-50, 50));
+  for (let i = 0; i < 15000; i++) {
+    let x = Math.round(random(-75, 75));
+    let y = Math.round(random(-75, 75));
     grid[index(displayX + x, displayY + y)] = -1;
   }
 }
