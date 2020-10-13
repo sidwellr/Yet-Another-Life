@@ -10,15 +10,15 @@ let generation = 1;
 // Cells with a negative value are alive
 // The absolute value of non-empty cells is the
 // generation the cell last changed
-let grid=[];
+let grid = [];
 
 let showGrid = true;
 
 // Display window, defines the visible part of the grid
-let displayX = Math.round(gridSize / 2);  // grid cell at horizontal center
-let displayY = Math.round(gridSize / 2);  // grid cell at vertical center
-let cellSize = 10;  // size of displayed cells in pixels
-let borderSize = 1;  // size of cell borders in pixels
+let displayX = Math.round(gridSize / 2); // grid cell at horizontal center
+let displayY = Math.round(gridSize / 2); // grid cell at vertical center
+let cellSize = 10; // size of displayed cells in pixels
+let borderSize = 1; // size of cell borders in pixels
 
 let fr = 15; // Frame rate
 
@@ -84,7 +84,7 @@ function keyPressed() {
 }
 
 // Get grid index for (x,y) location
-function index(x,y) {
+function index(x, y) {
   return x * gridSize + y;
 }
 
@@ -112,59 +112,59 @@ function initGrid() {
 // Initialize grid with a pattern (block laying engine)
 function initGrid1() {
   grid = [];
-  grid[index(displayX+30, displayY+30)] = -1;
-  grid[index(displayX+30, displayY+31)] = -1;
-  grid[index(displayX+31, displayY+30)] = -1;
-  grid[index(displayX+31, displayY+31)] = -1;
-  grid[index(displayX+40, displayY+30)] = -1;
-  grid[index(displayX+41, displayY+29)] = -1;
-  grid[index(displayX+41, displayY+31)] = -1;
-  grid[index(displayX+43, displayY+29)] = -1;
-  grid[index(displayX+43, displayY+32)] = -1;
-  grid[index(displayX+44, displayY+31)] = -1;
-  grid[index(displayX+44, displayY+32)] = -1;
-  grid[index(displayX+45, displayY+32)] = -1;
+  grid[index(displayX + 30, displayY + 30)] = -1;
+  grid[index(displayX + 30, displayY + 31)] = -1;
+  grid[index(displayX + 31, displayY + 30)] = -1;
+  grid[index(displayX + 31, displayY + 31)] = -1;
+  grid[index(displayX + 40, displayY + 30)] = -1;
+  grid[index(displayX + 41, displayY + 29)] = -1;
+  grid[index(displayX + 41, displayY + 31)] = -1;
+  grid[index(displayX + 43, displayY + 29)] = -1;
+  grid[index(displayX + 43, displayY + 32)] = -1;
+  grid[index(displayX + 44, displayY + 31)] = -1;
+  grid[index(displayX + 44, displayY + 32)] = -1;
+  grid[index(displayX + 45, displayY + 32)] = -1;
   drawGrid();
 }
 
 // Initialize grid with a pattern (lightweight spaceship)
 function initGrid2() {
   grid = [];
-  grid[index(displayX+30, displayY-2)] = -1;
-  grid[index(displayX+29, displayY-1)] = -1;
-  grid[index(displayX+29, displayY)] = -1;
-  grid[index(displayX+29, displayY+1)] = -1;
-  grid[index(displayX+30, displayY+1)] = -1;
-  grid[index(displayX+31, displayY+1)] = -1;
-  grid[index(displayX+32, displayY+1)] = -1;
-  grid[index(displayX+33, displayY)] = -1;
-  grid[index(displayX+33, displayY-2)] = -1;
+  grid[index(displayX + 30, displayY - 2)] = -1;
+  grid[index(displayX + 29, displayY - 1)] = -1;
+  grid[index(displayX + 29, displayY)] = -1;
+  grid[index(displayX + 29, displayY + 1)] = -1;
+  grid[index(displayX + 30, displayY + 1)] = -1;
+  grid[index(displayX + 31, displayY + 1)] = -1;
+  grid[index(displayX + 32, displayY + 1)] = -1;
+  grid[index(displayX + 33, displayY)] = -1;
+  grid[index(displayX + 33, displayY - 2)] = -1;
   drawGrid();
 }
 
 // Initialize grid with a pattern (R-pentomino)
 function initGrid3() {
   grid = [];
-  grid[index(displayX-1, displayY)] = -1;
-  grid[index(displayX, displayY-1)] = -1;
+  grid[index(displayX - 1, displayY)] = -1;
+  grid[index(displayX, displayY - 1)] = -1;
   grid[index(displayX, displayY)] = -1;
-  grid[index(displayX, displayY+1)] = -1;
-  grid[index(displayX+1, displayY-1)] = -1;
+  grid[index(displayX, displayY + 1)] = -1;
+  grid[index(displayX + 1, displayY - 1)] = -1;
   drawGrid();
 }
 
 // Initialize grid with a pattern (Bunnies)
 function initGrid4() {
   grid = [];
-  grid[index(displayX-4, displayY-2)] = -1;
-  grid[index(displayX-3, displayY+1)] = -1;
-  grid[index(displayX-2, displayY-1)] = -1;
-  grid[index(displayX-2, displayY)] = -1;
-  grid[index(displayX-1, displayY+1)] = -1;
-  grid[index(displayX+1, displayY)] = -1;
-  grid[index(displayX+2, displayY-1)] = -1;
-  grid[index(displayX+2, displayY-2)] = -1;
-  grid[index(displayX+3, displayY)] = -1;
+  grid[index(displayX - 4, displayY - 2)] = -1;
+  grid[index(displayX - 3, displayY + 1)] = -1;
+  grid[index(displayX - 2, displayY - 1)] = -1;
+  grid[index(displayX - 2, displayY)] = -1;
+  grid[index(displayX - 1, displayY + 1)] = -1;
+  grid[index(displayX + 1, displayY)] = -1;
+  grid[index(displayX + 2, displayY - 1)] = -1;
+  grid[index(displayX + 2, displayY - 2)] = -1;
+  grid[index(displayX + 3, displayY)] = -1;
   drawGrid();
 }
 
@@ -179,20 +179,16 @@ function drawGrid() {
   push();
   translate(width / 2, height / 2);
 
-  // Draw empty grid
+  // Draw grid lines
   background(220);
   if (showGrid) {
     stroke(150);
     strokeWeight(borderSize);
-    for (x = (leftCell - displayX) * size - size / 2;
-         x <= (rightCell - displayX) * size;
-         x += size) {
-      line(x,-height,x,height);
+    for (x = (leftCell - displayX) * size - size / 2; x <= (rightCell - displayX) * size; x += size) {
+      line(x, -height, x, height);
     }
-    for (y = (topCell - displayY) * size - size / 2;
-         y <= (bottomCell - displayY) * size;
-         y += size) {
-      line(-width,y,width,y);
+    for (y = (topCell - displayY) * size - size / 2; y <= (bottomCell - displayY) * size; y += size) {
+      line(-width, y, width, y);
     }
   }
 
@@ -203,10 +199,10 @@ function drawGrid() {
     if (grid[cell] < 0) {
       let cellX = gridx(cell);
       let cellY = gridy(cell);
-      if (cellX >= leftCell && cellX <= rightCell &&
-          cellY >= topCell && cellY <= bottomCell) {
-        circle((cellX - displayX) * size, (cellY - displayY) * size, cellSize-1);
-      }
+      //      if (cellX >= leftCell && cellX <= rightCell &&
+      //          cellY >= topCell && cellY <= bottomCell) {
+      circle((cellX - displayX) * size, (cellY - displayY) * size, cellSize - 1);
+      //      }
     }
   }
 
@@ -216,7 +212,7 @@ function drawGrid() {
 // Compute a new generation
 function newGeneration() {
   let size = cellSize + borderSize
-  let neighborCount = [];  // Sparse array; need to check for undefined values
+  let neighborCount = []; // Sparse array; need to check for undefined values
 
   function increment(cellX, cellY) {
     if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
@@ -235,23 +231,18 @@ function newGeneration() {
     if (grid[cell] < 0) {
       let cellX = gridx(cell);
       let cellY = gridy(cell);
-      increment(cellX-1, cellY-1);
-      increment(cellX, cellY-1);
-      increment(cellX+1, cellY-1);
-      increment(cellX-1, cellY);
-      increment(cellX+1, cellY);
-      increment(cellX-1, cellY+1);
-      increment(cellX, cellY+1);
-      increment(cellX+1, cellY+1);
+      increment(cellX - 1, cellY - 1);
+      increment(cellX, cellY - 1);
+      increment(cellX + 1, cellY - 1);
+      increment(cellX - 1, cellY);
+      increment(cellX + 1, cellY);
+      increment(cellX - 1, cellY + 1);
+      increment(cellX, cellY + 1);
+      increment(cellX + 1, cellY + 1);
     }
   }
 
-  //push();
-  //translate(width / 2, height / 2);
-
   // Birth new cell (or keep existing one) when there are 3 neighbors
-  //fill(0);
-  //noStroke();
   for (let cell in neighborCount) {
     if (neighborCount[cell] === 3) {
       if (grid[cell] === undefined || grid[cell] > 0) {
@@ -264,23 +255,19 @@ function newGeneration() {
   }
 
   // Kill cells with less than 2 or more than 3 neighbors
-  //fill(220);
-  //noStroke();
   for (let cell in grid) {
     if (grid[cell] < 0) {
       if (neighborCount[cell] === undefined ||
-          neighborCount[cell] < 2 || neighborCount[cell] > 3) {
+        neighborCount[cell] < 2 || neighborCount[cell] > 3) {
         grid[cell] = generation;
         //let cellX = gridx(cell);
         //let cellY = gridy(cell);
         //circle((cellX - displayX) * size, (cellY - displayY) * size, cellSize);
       }
     } else {
-      if (grid[cell] < generation-15) {
-        delete grid[cell];  // Delete cells dead longer than 15 generations
+      if (grid[cell] < generation - 15) {
+        delete grid[cell]; // Delete cells dead longer than 15 generations
       }
     }
   }
-
-  //pop();
 }
