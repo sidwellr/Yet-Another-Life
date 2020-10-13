@@ -13,6 +13,7 @@ let generation = 1;
 let grid = [];
 
 let showGrid = true;
+let showTrails = false;
 
 // Display window, defines the visible part of the grid
 let displayX = Math.round(gridSize / 2); // grid cell at horizontal center
@@ -21,6 +22,7 @@ let cellSize = 10; // size of displayed cells in pixels
 let borderSize = 1; // size of cell borders in pixels
 
 let fr = 15; // Frame rate
+let latent = 20; // Number of generations to keep dead cells in grid
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -62,6 +64,8 @@ function keyTyped() {
   } else if (key === 'c') {
     displayX = Math.round(gridSize / 2);
     displayY = Math.round(gridSize / 2);
+  } else if (key === 't') {
+    showTrails = !showTrails;
   } else if (key === '1') {
     initGrid1();
   } else if (key === '2') {
@@ -80,6 +84,11 @@ function keyPressed() {
   } else if (keyCode === DOWN_ARROW) {
     fr /= 2;
     frameRate(fr);
+  } else if (keyCode === LEFT_ARROW) {
+    latent -= 2;
+    if (latent < 0) latent = 0;
+  } else if (keyCode === RIGHT_ARROW) {
+    latent += 2;
   }
 }
 
@@ -193,16 +202,18 @@ function drawGrid() {
   }
 
   // Draw live cells
-  fill(0);
   noStroke();
   for (let cell in grid) {
+    let cellX = gridx(cell);
+    let cellY = gridy(cell);
     if (grid[cell] < 0) {
-      let cellX = gridx(cell);
-      let cellY = gridy(cell);
-      //      if (cellX >= leftCell && cellX <= rightCell &&
-      //          cellY >= topCell && cellY <= bottomCell) {
+      fill(0);
       circle((cellX - displayX) * size, (cellY - displayY) * size, cellSize - 1);
-      //      }
+    } else {
+      if (showTrails) {
+        fill(255);
+        circle((cellX - displayX) * size, (cellY - displayY) * size, cellSize - 1);
+      }
     }
   }
 
@@ -247,9 +258,6 @@ function newGeneration() {
     if (neighborCount[cell] === 3) {
       if (grid[cell] === undefined || grid[cell] > 0) {
         grid[cell] = -generation;
-        //let cellX = gridx(cell);
-        //let cellY = gridy(cell);
-        //circle((cellX - displayX) * size, (cellY - displayY) * size, cellSize-1);
       }
     }
   }
@@ -260,13 +268,10 @@ function newGeneration() {
       if (neighborCount[cell] === undefined ||
         neighborCount[cell] < 2 || neighborCount[cell] > 3) {
         grid[cell] = generation;
-        //let cellX = gridx(cell);
-        //let cellY = gridy(cell);
-        //circle((cellX - displayX) * size, (cellY - displayY) * size, cellSize);
       }
     } else {
-      if (grid[cell] < generation - 15) {
-        delete grid[cell]; // Delete cells dead longer than 15 generations
+      if (grid[cell] < generation - latent) {
+        delete grid[cell]; // Delete cells that have been dead for awhile
       }
     }
   }
