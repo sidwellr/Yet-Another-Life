@@ -4,6 +4,9 @@ const gridSize = 1000000; // life grid is gridSize x gridSize cells
 // The global generation counter
 let generation = 1;
 
+// Number of live cells (updated every generation)
+let liveCells = 0;
+
 // The life grid, a sparse array.
 // Empty cells are, of course, empty
 // Cells with a positive value are empty
@@ -24,11 +27,71 @@ let borderSize = 1; // size of cell borders in pixels
 let fr = 15; // Frame rate
 let latent = 20; // Number of generations to keep dead cells in grid
 
+let appTitle;
+let genDisplay;
+let cellDisplay;
+let gridButton;
+let trailsButton;
+let speedSlider;
+let latentSlider;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  createControls();
   frameRate(fr);
   initGrid();
-  drawGrid();
+}
+
+function createControls() {
+  appTitle = createP("Yet Another Life");
+  appTitle.position(10, -20);
+  appTitle.style("font-size", "19pt");
+  appTitle.style("font-weight", "bold");
+
+  createP("Generation: ").position(10, 15);
+  genDisplay = createP(generation);
+  genDisplay.position(125, 15);
+
+  createP("Alive:").position(10, 35);
+  cellDisplay = createP(liveCells);
+  cellDisplay.position(125, 35)
+
+  gridButton = createCheckbox("Grid");
+  gridButton.position(10, 85);
+  gridButton.style("font-size","14pt");
+  gridButton.checked(showGrid);
+  gridButton.changed(() => showGrid = !showGrid);
+
+  trailsButton = createCheckbox("Trails");
+  trailsButton.position(75, 85);
+  trailsButton.style("font-size","14pt");
+  trailsButton.checked(showTrails);
+  trailsButton.changed(() => showTrails = !showTrails);
+
+  createP("Speed").position(10,90);
+  speedSlider = createSlider(0, 5, log(fr));
+  speedSlider.position(10, 130);
+  speedSlider.style("width","180px");
+  speedSlider.input(() => {
+    fr = exp(speedSlider.value());
+    frameRate(fr);
+  });
+
+  createP("Trail length").position(10, 135);
+  latentSlider = createSlider(0, 200, latent);
+  latentSlider.position(10, 175);
+  latentSlider.style("width","180px");
+  latentSlider.input(() => latent = latentSlider.value());
+
+  createP("Drag to pan").position(10,180);
+  createP("Scroll wheel to zoom").position(10,200);
+}
+
+function drawControls() {
+  fill(230, 220, 235, 240);
+  rect(0, 0, 200, 250);
+  genDisplay.html(generation);
+  cellDisplay.html(liveCells);
 }
 
 function windowResized() {
@@ -48,6 +111,7 @@ function draw() {
   }
   newGeneration();
   drawGrid();
+  drawControls();
 }
 
 function mouseWheel(event) {
@@ -59,6 +123,7 @@ function mouseWheel(event) {
 function keyTyped() {
   if (key === 'g') {
     showGrid = !showGrid;
+    gridButton.checked(showGrid);
   } else if (key === 'r') {
     initGrid();
   } else if (key === 'c') {
@@ -66,6 +131,7 @@ function keyTyped() {
     displayY = Math.round(gridSize / 2);
   } else if (key === 't') {
     showTrails = !showTrails;
+    trailsButton.checked(showTrails);
   } else if (key === '1') {
     initGrid1();
   } else if (key === '2') {
@@ -81,14 +147,18 @@ function keyPressed() {
   if (keyCode === UP_ARROW) {
     fr *= 2;
     frameRate(fr);
+    speedSlider.value(log(fr));
   } else if (keyCode === DOWN_ARROW) {
     fr /= 2;
     frameRate(fr);
+    speedSlider.value(log(fr));
   } else if (keyCode === LEFT_ARROW) {
     latent -= 2;
     if (latent < 0) latent = 0;
+    latentSlider.value(latent);
   } else if (keyCode === RIGHT_ARROW) {
     latent += 2;
+    latentSlider.value(latent);
   }
 }
 
@@ -111,7 +181,7 @@ function gridy(i) {
 function initGrid() {
   // Randomly for now...
   grid = [];
-  for (let i = 0; i < 15000; i++) {
+  for (let i = 0; i < 5000; i++) {
     let x = Math.round(random(-75, 75));
     let y = Math.round(random(-75, 75));
     grid[index(displayX + x, displayY + y)] = -1;
@@ -201,12 +271,14 @@ function drawGrid() {
     }
   }
 
-  // Draw live cells
+  // Draw (and count) live cells
+  liveCells = 0;
   noStroke();
   for (let cell in grid) {
     let cellX = gridx(cell);
     let cellY = gridy(cell);
     if (grid[cell] < 0) {
+      liveCells++;
       fill(0);
       circle((cellX - displayX) * size, (cellY - displayY) * size, cellSize - 1);
     } else {
@@ -224,7 +296,7 @@ function drawGrid() {
 function newGeneration() {
   let size = cellSize + borderSize
   let neighborCount = []; // Sparse array; need to check for undefined values
-
+  
   function increment(cellX, cellY) {
     if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
       let cell = index(cellX, cellY);
