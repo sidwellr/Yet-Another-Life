@@ -14,3 +14,5 @@ Active keys:
 * c: Center the window on the grid.
 * r: Reset the grid to a random configuration (like when it first starts).
 * 1-4: Reset the grid to one of several preset configurations.
+
+This sketch is also available in the online p5.js editor: https://editor.p5js.org/rsidwell/sketches/3IKZhhpWY.
